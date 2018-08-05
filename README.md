@@ -58,7 +58,11 @@ As an example of how to use this script in an automated fashion, I've provided a
 	- Note: Make sure to enable the checkbox "Allow write access"!
 3. Add the **private** key to the repo on Circle CI (`https://circleci.com/gh/you/repo-name/edit#ssh`)
 	- Note: Enter `github.com` in the "Hostname" field.
-4. Add the following Circle CI configuration to the repo (`.circleci/config.yml`)
+4. Remove the default deploy/checkout key from Circle CI and GitHub
+	- `https://circleci.com/gh/you/repo-name/edit#checkout`
+	- `https://github.com/you/repo-name/settings/keys`
+5. Add the following Circle CI configuration to the repo (`.circleci/config.yml`)
+	- Note: You need to [add the fingerprint](https://circleci.com/docs/2.0/configuration-reference/#add_ssh_keys) for your deploy key (`ssh-keygen -lf /path/to/key`)
 
 ```yaml
 version: 2
@@ -67,8 +71,11 @@ jobs:
     docker:
       - image: p3lim/lua-doc-parser:latest
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:..."
       - checkout
-      - run: build.sh
+      - run: build
 workflows:
   version: 2
   build:
