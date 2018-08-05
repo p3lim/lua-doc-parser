@@ -1,7 +1,7 @@
 FROM alpine:3.7
 
 # install dependencies
-RUN apk add --no-cache python3 git
+RUN apk add --no-cache python3 openssh-client git
 
 # copy scripts
 COPY parse.py /usr/local/bin/parse
