@@ -1,7 +1,7 @@
 # lua-doc-parser
 
 This is a Python script that will generate Markdown documentation from Lua source code.  
-It parses any Lua files for any multi-line comment blocks and sequentially adds them to a markdown file based on the "header" of the comment block.
+It parses any Lua files in the current directory for any [multi-line comment](https://www.lua.org/pil/1.3.html) blocks and sequentially adds them to a markdown file based on the "header" of the comment block.
 
 Example:
 ```lua
