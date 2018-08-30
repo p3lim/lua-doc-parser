@@ -19,6 +19,7 @@ STOP = re.compile(r'^\t*--\]\]$')
 
 # create a dictionary to store our pages
 pages = {}
+headers = {}
 
 print('Parsing documentation in \'{}\''.format(os.getcwd()))
 for file in glob.glob('**/*.lua', recursive=True):
@@ -61,8 +62,13 @@ for file in glob.glob('**/*.lua', recursive=True):
 						pages[pageName] = []
 
 					if isHeader:
-						# the block was a header, we need to put it at the top of the list of blocks
-						pages[pageName].insert(0, textBlock)
+						# the block was a header
+						if pageName in headers:
+							# append it to the existing block
+							headers[pageName] += '\n\n{}'.format(textBlock)
+						else:
+							# add it
+							headers[pageName] = textBlock
 					else:
 						# normal block, just append it
 						pages[pageName].append(textBlock)
@@ -84,6 +90,9 @@ for file in glob.glob('**/*.lua', recursive=True):
 			# at the end of a file, if we found some blocks, log it
 			print('- Found {} blocks in \'{}\''.format(numBlocks, file))
 
+for name, block in headers.items():
+	# insert headers as the top-most item in pages
+	pages[name].insert(0, block)
 
 # done parsing docs, let's write it out
 print('\nWriting to files')
