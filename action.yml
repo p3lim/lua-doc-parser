@@ -1,0 +1,10 @@
+name: Lua docs generator
+description: Generates markdown documentation from in-line Lua comments
+branding:
+  icon: package
+  color: green
+runs:
+  using: docker
+  image: Dockerfile
+  entrypoint: /usr/local/bin/build
+
