@@ -1,11 +1,21 @@
 #!/bin/sh
 
-# set git identity
-git config --global user.email "${GIT_EMAIL:-}"
-git config --global user.name "${GIT_NAME:-Circle CI}"
+if [[ -z "$CI" ]]; then
+	echo "No CI"
+	exit 1
+fi
+
+if [[ -n "$CIRCLECI" ]]; then
+	COMMIT_SHA="$CIRCLE_SHA1"
+	REPO_PATH="$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
+fi
+if [[ -n "$GITHUB_ACTION" ]]; then
+	COMMIT_SHA="$GITHUB_SHA"
+	REPO_PATH="$GITHUB_REPOSITORY"
+fi
 
 # clone the wiki repo
-git clone "git@github.com:$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.wiki" .wiki
+git clone "git@github.com:$REPO_PATH.wiki" .wiki
 
 # run the python script
 parse -o ".wiki"
@@ -17,7 +27,7 @@ cd .wiki
 git add .
 
 # commit using the last commit SHA as the message
-git commit -m "$CIRCLE_SHA1"
+git commit -m "$COMMIT_SHA" --author "CI <>"
 
 # push the wiki repo
 git push origin master
