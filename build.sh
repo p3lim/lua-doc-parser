@@ -14,6 +14,10 @@ if [[ -n "$GITHUB_ACTION" ]]; then
 	REPO_PATH="$GITHUB_REPOSITORY"
 fi
 
+# set git identity
+git config --global user.email "<>"
+git config --global user.name "${GIT_NAME:-CI}
+
 # clone the wiki repo
 git clone "git@github.com:$REPO_PATH.wiki" .wiki
 
@@ -27,7 +31,7 @@ cd .wiki
 git add .
 
 # commit using the last commit SHA as the message
-git commit -m "$COMMIT_SHA" --author "CI <>"
+git commit -m "$COMMIT_SHA"
 
 # push the wiki repo
 git push origin master
