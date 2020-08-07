@@ -11,6 +11,5 @@ runs:
   using: docker
   image: Dockerfile
   entrypoint: /usr/local/bin/parse
-  with:
-    args: -o "${{ input.path }}"
-
+  args:
+    - -o "${{ input.path }}"
