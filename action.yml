@@ -3,8 +3,14 @@ description: Generates markdown documentation from in-line Lua comments
 branding:
   icon: package
   color: green
+inputs:
+  path:
+    description: Path containing files to parse.
+    required: true
 runs:
   using: docker
   image: Dockerfile
-  entrypoint: /usr/local/bin/build
+  entrypoint: /usr/local/bin/parse
+  with:
+    args: -o "${{ input.path }}"
 
