@@ -9,7 +9,7 @@ parser.add_argument('-b', dest='separator', default='***', help='block separator
 parser.add_argument('-s', dest='header_size', default=3, type=int, help='header size (default: 3)')
 args = parser.parse_args()
 
-PATH = args.output_dir
+PATH = args.output_dir.strip()
 HSIZE = args.header_size
 SEPARATOR = '\n{}\n\n'.format(args.separator)
 
