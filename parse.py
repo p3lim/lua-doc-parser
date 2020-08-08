@@ -94,6 +94,8 @@ for name, block in headers.items():
 	# insert headers as the top-most item in pages
 	pages[name].insert(0, block)
 
+print(f'path: "{os.getcwd()}" "{PATH}"')
+
 # done parsing docs, let's write it out
 print('\nWriting to files')
 
