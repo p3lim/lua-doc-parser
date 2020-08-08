@@ -101,7 +101,7 @@ for name, blocks in pages.items():
 	# iterates over 'pages' dict
 	# figure out the path we want to save to, and log it
 	filepath = f'{name}.md'
-	print('- {}'.format(os.path.join(PATH, filepath))
+	print('- {}'.format(os.path.join(PATH, filepath)))
 
 	with open(os.path.join(os.getcwd(), PATH, filepath), 'w') as f:
 		# open the output file for writing, join the blocks for the page, then write
