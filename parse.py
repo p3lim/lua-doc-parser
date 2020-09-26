@@ -41,7 +41,7 @@ for file in glob.glob('**/*.lua', recursive=True):
 					# found a text block
 					# the expected format is:
 					# "--[[ PageName:foo..."
-					if len(header.groups()) == 2 or header.group(5).lower() == 'header':
+					if header.group(5) and header.group(5).lower() == 'header':
 						# our "foo" was "header", which signifies this should be text on top of
 						# the page, but there's already a dedicated heading for the page
 						isHeader = True
