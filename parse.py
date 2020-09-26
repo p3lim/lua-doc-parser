@@ -14,8 +14,8 @@ HSIZE = args.header_size
 SEPARATOR = '\n{}\n\n'.format(args.separator)
 
 # compile regex patterns beforehand
-START = re.compile(r'^\t*--\[\[ ?((\w+)([:.](.+))?)$')
-STOP = re.compile(r'^\t*--\]\]$')
+START = re.compile(r'^\t*--\[(=*)\[ ?((\w+)([:.](.+))?)$')
+STOP = re.compile(r'^\t*--\](=*)\]$')
 
 # create a dictionary to store our pages
 pages = {}
@@ -30,6 +30,7 @@ for file in glob.glob('**/*.lua', recursive=True):
 		isHeader = False
 		pageName = None
 		numBlocks = 0
+		comment = None
 
 		# traverse file line-by-line for content
 		for line in f:
@@ -40,7 +41,7 @@ for file in glob.glob('**/*.lua', recursive=True):
 					# found a text block
 					# the expected format is:
 					# "--[[ PageName:foo..."
-					if len(header.groups()) == 2 or header.group(4).lower() == 'header':
+					if len(header.groups()) == 2 or header.group(5).lower() == 'header':
 						# our "foo" was "header", which signifies this should be text on top of
 						# the page, but there's already a dedicated heading for the page
 						isHeader = True
@@ -49,11 +50,12 @@ for file in glob.glob('**/*.lua', recursive=True):
 						textBlock = '{} {}\n\n'.format('#' * HSIZE, header.group(1))
 
 					# store the page name and toggle reading mode
-					pageName = header.group(2)
+					comment = header.group(1)
+					pageName = header.group(3)
 					isReading = True
 			else:
 				# we're reading, check if the line signifies the end of a block
-				if STOP.match(line):
+				if STOP.match(line) and header.group(1) == comment:
 					# line signified the end of a block, we'll need to store it
 					# the expected format is:
 					# "--]]"
@@ -79,6 +81,7 @@ for file in glob.glob('**/*.lua', recursive=True):
 					textBlock = ''
 					pageName = None
 					numBlocks += 1
+					comment = None
 					continue
 				else:
 					# we're currently in the middle of a block, just store the line
