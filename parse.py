@@ -47,7 +47,7 @@ for file in glob.glob('**/*.lua', recursive=True):
 						isHeader = True
 					else:
 						# everything else gets h3
-						textBlock = '{} {}\n\n'.format('#' * HSIZE, header.group(1))
+						textBlock = '{} {}\n\n'.format('#' * HSIZE, header.group(2))
 
 					# store the page name and toggle reading mode
 					comment = header.group(1)
