@@ -4,12 +4,19 @@ branding:
   icon: package
   color: green
 inputs:
-  path:
-    description: Path containing files to parse.
+  output:
+    description: Output path for generated documentation files
     required: true
+  separator:
+    description: Markup to use as a separator between documentation blocks
+    required: false
+    default: '***'
+  headersize:
+    description: Size of headers for each block
+    required: false
+    default: 3
 runs:
-  using: docker
-  image: Dockerfile
-  entrypoint: /usr/local/bin/parse
-  args:
-    - -o ${{ inputs.path }}
+  using: composite
+  steps:
+    - run: python3 $GITHUB_ACTION_PATH/parse.py -o ${{ inputs.path }} -o {{ inputs.separator }} -s {{ inputs.headersize }}
+      shell: bash
