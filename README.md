@@ -36,7 +36,7 @@ As you can see, any markdown notation is allowed inside the block.
 Indentation is limited to _tabs_ for the blocks, and any indendation inside the blocks is limited to _spaces_.
 This is to allow code snippets in documentation in-line in functions to parse correctly.
 
-## Usage:
+## Usage
 
 ```
 usage: parse.py [-h] [-o OUTPUT_DIR] [-b SEPARATOR] [-s HEADER_SIZE]
@@ -46,4 +46,43 @@ optional arguments:
   -o OUTPUT_DIR   output directory (default: "docs")
   -b SEPARATOR    block separator (default: "***")
   -s HEADER_SIZE  header size (default: 3)
+```
+
+## GitHub Action
+
+This is an example workflow that will do the following:
+- checkout the project and its wiki
+- use this script as an action, outputting to the wiki directory
+- commit and push the changes of the wiki directory
+
+```yaml
+name: Generate documentation
+on: push
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v2
+
+      - name: Clone wiki
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.repository }}.wiki
+          path: .wiki
+
+      - name: Parse and generate documentation
+        uses: p3lim/lua-doc-parser@v2
+        with:
+          output: .wiki
+
+      - name: Push wiki changes
+        working-directory: .wiki
+        run: |
+          git config user.name CI
+          git config user.email "<>"
+          git add .
+          git diff --quiet HEAD || git commit -m "$GITHUB_SHA"
+          git push
 ```
