@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 from glob import glob
 
 # parse args
-parser = argparse.ArgumentParser()
+parser = ArgumentParser()
 parser.add_argument('-o', dest='output_dir', default='docs', help='output directory (default: "docs")')
 parser.add_argument('-b', dest='separator', default='***', help='block separator (default: "***")')
 parser.add_argument('-s', dest='header_size', default=3, type=int, help='header size (default: 3)')
