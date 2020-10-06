@@ -17,7 +17,7 @@ HSIZE = args.header_size
 SEPARATOR = f'\n{args.separator}\n\n'
 
 # compile regex patterns beforehand
-START = re.compile(r'^\t*--\[(=*)\[ ?((\w+)([:.](.+))?)$')
+START = re.compile(r'^\t*--\[(=*)\[ ?((\w+)[:.](.+)?)$')
 STOP = re.compile(r'^\t*--\](=*)\]$')
 
 # create a dictionary to store our pages
@@ -44,7 +44,7 @@ for file in glob('**/*.lua', recursive=True):
 					# found a text block
 					# the expected format is:
 					# "--[[ PageName:foo..."
-					if header.group(5) and header.group(5).lower() == 'header':
+					if header.group(4) and header.group(4).lower() == 'header':
 						# our "foo" was "header", which signifies this should be text on top of
 						# the page, but there's already a dedicated heading for the page
 						isHeader = True
