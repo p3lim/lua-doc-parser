@@ -18,5 +18,5 @@ inputs:
 runs:
   using: composite
   steps:
-    - run: python3 $GITHUB_ACTION_PATH/parse.py -o ${{ inputs.path }} -b ${{ inputs.separator }} -s ${{ inputs.headersize }}
+    - run: python3 $GITHUB_ACTION_PATH/parse.py -o "${{ inputs.output }}" -b "${{ inputs.separator }}" -s ${{ inputs.headersize }}
       shell: bash
