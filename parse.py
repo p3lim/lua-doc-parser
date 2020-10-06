@@ -14,7 +14,7 @@ args = parser.parse_args()
 
 PATH = args.output_dir.strip()
 HSIZE = args.header_size
-SEPARATOR = '\n{}\n\n'.format(args.separator)
+SEPARATOR = f'\n{args.separator}\n\n'
 
 # compile regex patterns beforehand
 START = re.compile(r'^\t*--\[(=*)\[ ?((\w+)([:.](.+))?)$')
@@ -24,7 +24,7 @@ STOP = re.compile(r'^\t*--\](=*)\]$')
 pages = {}
 headers = {}
 
-print('Parsing documentation in \'{}\''.format(os.getcwd()))
+print(f'Parsing Lua files for documentation')
 for file in glob('**/*.lua', recursive=True):
 	# iterates recursively for every Lua file, then open file for reading
 	with open(file) as f:
@@ -50,7 +50,7 @@ for file in glob('**/*.lua', recursive=True):
 						isHeader = True
 					else:
 						# everything else gets h3
-						textBlock = '{} {}\n\n'.format('#' * HSIZE, header.group(2))
+						textBlock = f'{"#" * HSIZE} {header.group(2)}\n\n'
 
 					# store the page name and toggle reading mode
 					comment = header.group(1)
@@ -70,7 +70,7 @@ for file in glob('**/*.lua', recursive=True):
 						# the block was a header
 						if pageName in headers:
 							# append it to the existing block
-							headers[pageName] += '\n\n{}'.format(textBlock)
+							headers[pageName] += f'\n\n{textBlock}'
 						else:
 							# add it
 							headers[pageName] = textBlock
@@ -94,7 +94,7 @@ for file in glob('**/*.lua', recursive=True):
 
 		if numBlocks > 0:
 			# at the end of a file, if we found some blocks, log it
-			print('- Found {} blocks in \'{}\''.format(numBlocks, file))
+			print(f'- Found {numBlocks} blocks in "{file}"')
 
 for name, block in headers.items():
 	# insert headers as the top-most item in pages
@@ -103,13 +103,13 @@ for name, block in headers.items():
 print(f'path: "{os.getcwd()}" "{PATH}"')
 
 # done parsing docs, let's write it out
-print('\nWriting to files')
+print('\nWriting to files:')
 
 for name, blocks in pages.items():
 	# iterates over 'pages' dict
 	# figure out the path we want to save to, and log it
 	filepath = f'{name}.md'
-	print('- {}'.format(os.path.join(PATH, filepath)))
+	print(f'- {os.path.join(PATH, filepath)}')
 
 	with open(os.path.join(os.getcwd(), PATH, filepath), 'w') as f:
 		# open the output file for writing, join the blocks for the page, then write
