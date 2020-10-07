@@ -23,9 +23,12 @@ STOP = re.compile(r'^\t*--\](=*)\]$')
 # create a dictionary to store our pages
 pages = {}
 headers = {}
+numFiles = 0
 
 print(f'Parsing Lua files for documentation')
 for file in glob('**/*.lua', recursive=True):
+	numFiles += 1
+
 	# iterates recursively for every Lua file, then open file for reading
 	with open(file) as f:
 		isReading = False
@@ -96,21 +99,24 @@ for file in glob('**/*.lua', recursive=True):
 			# at the end of a file, if we found some blocks, log it
 			print(f'- Found {numBlocks} blocks in "{file}"')
 
-for name, block in headers.items():
-	# insert headers as the top-most item in pages
-	pages[name].insert(0, block)
+if len(headers) > 0:
+	for name, block in headers.items():
+		# insert headers as the top-most item in pages
+		pages[name].insert(0, block)
 
-# done parsing docs, let's write it out
-print('\nWriting to files:')
+	# done parsing docs, let's write it out
+	print('\nWriting to files:')
 
-for name, blocks in pages.items():
-	# iterates over 'pages' dict
-	# figure out the path we want to save to, and log it
-	filepath = f'{name}.md'
-	print(f'- {os.path.join(PATH, filepath)}')
+	for name, blocks in pages.items():
+		# iterates over 'pages' dict
+		# figure out the path we want to save to, and log it
+		filepath = f'{name}.md'
+		print(f'- {os.path.join(PATH, filepath)}')
 
-	with open(os.path.join(os.getcwd(), PATH, filepath), 'w') as f:
-		# open the output file for writing, join the blocks for the page, then write
-		f.write(SEPARATOR.join(blocks))
+		with open(os.path.join(os.getcwd(), PATH, filepath), 'w') as f:
+			# open the output file for writing, join the blocks for the page, then write
+			f.write(SEPARATOR.join(blocks))
 
-print('\nDone!')
+	print('\nDone!')
+else:
+	print(f'Unable to find any documentation in {numFiles} files')
