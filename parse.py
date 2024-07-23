@@ -26,7 +26,7 @@ headers = {}
 numFiles = 0
 
 print(f'Parsing Lua files for documentation')
-for file in glob('**/*.lua', recursive=True):
+for file in sorted(glob('**/*.lua', recursive=True)):
 	numFiles += 1
 
 	# iterates recursively for every Lua file, then open file for reading
